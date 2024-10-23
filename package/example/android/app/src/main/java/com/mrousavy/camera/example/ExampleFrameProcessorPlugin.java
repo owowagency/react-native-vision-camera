@@ -50,6 +50,17 @@ public class ExampleFrameProcessorPlugin extends FrameProcessorPlugin {
         byteBuffer.put(0, (byte)(Math.random() * 100));
         map.put("example_array_buffer", _sharedArray);
 
+        int[] primitiveIntArray = new int[]{ 10, 20 };
+        double[] primitiveDoubleArray = new double[]{20.5, 20.3};
+        float[] primitiveFloatArray = new float[]{30.3f, 60.5f};
+        boolean[] primitiveBooleanArray = new boolean[]{true, false, true, true};
+        int[][] arrayOfIntArray = new int[][]{new int[]{15, 20}, new int[]{5, 10}};
+        map.put("primitive_int_array", primitiveIntArray);
+        map.put("primitive_double_array", primitiveDoubleArray);
+        map.put("primitive_float_array", primitiveFloatArray);
+        map.put("primitive_boolean_array", primitiveBooleanArray);
+        map.put("array_of_primitive_int_array", arrayOfIntArray);
+
         return map;
     }
 

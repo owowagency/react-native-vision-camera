@@ -177,6 +177,69 @@ jsi::Value JSIJNIConversion::convertJNIObjectToJSIValue(jsi::Runtime& runtime, c
 
     std::shared_ptr<jsi::ArrayBuffer> array = sharedArray->cthis()->getArrayBuffer();
     return array->getArrayBuffer(runtime);
+  } else if (object->isInstanceOf(JArrayInt::javaClassStatic())) {
+      auto array = static_ref_cast<JArrayInt>(object);
+      auto pinned = array->pin();
+      auto size = pinned.size();
+      auto result = jsi::Array(runtime, size);
+
+      for (int i = 0; i < size; i += 1) {
+          auto item = pinned[i];
+          result.setValueAtIndex(runtime, i, jsi::Value(item));
+      }
+
+      pinned.release();
+      return result;
+  } else if (object->isInstanceOf(JArrayDouble::javaClassStatic())) {
+      auto array = static_ref_cast<JArrayDouble>(object);
+      auto pinned = array->pin();
+      auto size = pinned.size();
+      auto result = jsi::Array(runtime, size);
+
+      for (int i = 0; i < size; i += 1) {
+          auto item = pinned[i];
+          result.setValueAtIndex(runtime, i, jsi::Value(item));
+      }
+
+      pinned.release();
+      return result;
+  } else if (object->isInstanceOf(JArrayFloat ::javaClassStatic())) {
+      auto array = static_ref_cast<JArrayFloat>(object);
+      auto pinned = array->pin();
+      auto size = pinned.size();
+      auto result = jsi::Array(runtime, size);
+
+      for (int i = 0; i < size; i += 1) {
+          auto item = pinned[i];
+          result.setValueAtIndex(runtime, i, jsi::Value(item));
+      }
+
+      pinned.release();
+      return result;
+  } else if (object->isInstanceOf(JArrayBoolean ::javaClassStatic())) {
+      auto array = static_ref_cast<JArrayBoolean>(object);
+      auto pinned = array->pin();
+      auto size = pinned.size();
+      auto result = jsi::Array(runtime, size);
+
+      for (int i = 0; i < size; i += 1) {
+          bool item = pinned[i];
+          result.setValueAtIndex(runtime, i, jsi::Value(item));
+      }
+
+      pinned.release();
+      return result;
+  } else if (object->isInstanceOf(JArrayClass<jobject>::javaClassStatic())) {
+      auto array = static_ref_cast<JArrayClass<jobject>>(object);
+      auto size = array->size();
+      auto result = jsi::Array(runtime, size);
+
+      for (int i = 0; i < size; i += 1) {
+          auto item = array->getElement(i);
+          result.setValueAtIndex(runtime, i,  convertJNIObjectToJSIValue(runtime, item));
+      }
+
+      return result;
   }
 
   auto type = object->getClass()->toString();
